@@ -1,0 +1,267 @@
+校园信息API接口
+===============
+
+## 提供JSON/JSONP类型的数据
+以example.org为例，假设url为dosth
+1. JSON
+两种方式。
+
+    1 通过设置头部的请求资源类型为 *application/json*，那么完整的uri为http://example.org/dosth
+
+    2 通过在uri后添加 *.json* 后缀，那么完整的uri为http://example.org/dosth.json
+
+2. JSONP
+**JSONP**跨域请求只支持 GET 请求方式，并且，只能在uri后添加 *.jsonp* 后缀
+
+## 例子（使用jQuery)
+```javascript
+// json, 设置请求头部方式
+$.ajax({
+    url: 'http://example.org/dosth',
+    type: 'GET',
+    dataType: 'json', // 这里申明请求的类型为application/json
+    success: function(data){
+        // do your job...
+    }
+})
+
+// json，以请求后缀方式
+$.ajax({
+    url: 'http://example.org/dosth.json',
+    type: 'GET'，
+    success: function(data) {
+        // do your job...
+    }
+})
+
+// jsonp 跨域请求，只能是GET请求
+$.ajax({
+    url: 'http://example.org//dosth.jsonp',
+    type: 'GET',
+    dataType: 'jsonp', // 设置请求头部为 application/javascript
+    success: function(data) {
+        // do your job...
+    }
+})
+```
+
+## 校园信息接口说明(含有'!'的需要app_key，并且都需要用使用account和password参数，详情请联系雨无声:-))
+1. 获取某个认证用户的信息
+uri: /auth_users/{uid}
+
+type: GET
+
+params{
+    {uid} 必填，用户的id
+}
+
+返回数据：
+
+id: 用户idemail, long
+org: 来自那个组织（机构）string
+about: 关于ta的个人简介 string
+contact: 联系方式 string
+account: 登陆账号 string
+authed_name: 认证（显示）名称 string
+join_date: 加入（认证）的时间 date-millions
+last_modified_date: 上次修改个人信息的时间 date-millions
+
+2. 获取某条信息
+uri: /notices/{id}
+
+type: GET
+
+params {
+    {id} 必填，信息的id
+}
+
+返回数据：
+
+noticesice {
+    id: 信息的id long
+    title: 信息的标题 string
+    content：信息的内容（html/text） string
+    author: {
+        // 信息的作者，见1
+    }
+    click_times: 点击次数 long
+    add_date: 首次发表的时间 date-millions
+    last_modified_date: 上一次修改的时间 date-millions
+    doc_url: 附件地下载地址（没有为null）string
+    doc_name: 附件的名字（可能为null）string
+}
+
+3. !创建一条新信息
+uri: /notices/create
+
+type: POST
+
+params {
+    title 信息标题，必选
+    content 信息内容，必选
+    doc_name: 附件名，可选
+}
+
+返回数据：
+notice {
+    // 见2（没有notice这个json key了）
+}
+
+4. !给某篇信息上传文件
+uri: /notices/{id}/upload_file
+
+type: POST
+
+params {
+    {id} 必填，信息的标题
+    file 必填，附件
+}
+
+返回数据：
+success: 是否成功，boolean
+status: 是否成功（1->成功，0->失败）int
+
+5. !修改某篇信息
+uri: /notices/{id}/modify
+
+type: PUT
+
+params {
+    title 必填，修改后的标题
+    content 必填，内容，修改后的内容
+    {id} 必填，信息的id
+}
+
+返回数据：
+notice {
+    // 见2（不需要notice 这个key）
+}
+
+6. !屏蔽（解开屏蔽）某篇信息(如果是正常的，就屏蔽之，反之亦然)
+uri: /notices/{id}/block
+
+type: PUT
+
+params {
+    {id} 必填，信息的id
+}
+
+返回数据：
+
+见5
+
+7. 查看是否有更新的信息的条数
+uri: /notices/newer_than?local_nid={local_nid}
+
+type: GET
+
+params {
+    {local_nid} 作为比较的信息的id
+}
+
+返回数据：
+
+count 比{local_nid}更新的信息的条数 int
+
+8. 获取最新的信息列表
+uri: /notices?type=0&count={count}
+
+method: GET
+
+params {
+    {count} 必填，获取多少条（1-50）
+}
+
+返回数据：
+
+notices {
+    // notice的数组，见2
+}
+
+9. 获取某个认证用户的信息列表
+uri: /noticesicees?type=1&count={count}&uid={uid}&append={append}
+
+method: GET
+
+params {
+    {count} 必填，多少条（1-50）
+    {uid} 必填，用户的id
+    {nid} 可选（默认为0）是否存在偏移，1->存在（加载更新/更旧），0->不存在(或者最新的)
+    {append} 可选（默认为false），是否追加（加载更多，更旧）需配合{nid}使用
+}
+
+返回数据：
+
+notices {
+    // 见8
+}
+
+10. 加载更多/更新的信息列表
+uri: /notices?type=3&nid={nid}&append={append}
+
+method: GET
+
+params {
+    {nid} 必填，比较的信息的id
+    {append} 可选（默认为false），是否加载更多，否则加载最新的信息列表
+}
+
+返回数据：
+
+notices {
+    // 见9
+}
+
+11. 搜索
+uri: /notices/q?q={q}&count={count}
+
+method: GET
+
+params {
+    {q} 必填，查询关键字，可以使标题或者内容
+    {count} 可选（默认50），查询多少条记录，（1-50）
+}
+
+返回数据：
+
+notices {
+    // 见10
+}
+
+12. 同步数据（不支持jsonp）
+uri: /notices/sync?last_timestamp={last}&count={count}
+
+method: GET
+
+params {
+    {last} 必填，上一次同步的时间戳
+    {count} 必填，同步多少条
+}
+
+返回数据：
+notices {
+    // 见 11
+}
+
+auth_users {
+    // 1的json数组
+}
+
+12. 获取认证用户列表
+uri: /auth_users?type=3&count={count}&offset={offset}&append={append}
+
+method: GET
+
+params {
+    {count} 必填，多少条（1-50）
+    {offset} 可选（默认0）是否偏移，从哪一个用户的id开始或许更旧或者更新
+    {append} 可选（默认false）需配合offset使用，true->加载更多，false->加载最新
+}
+
+返回数据：
+
+auth_users {
+    // 见1，auth_user的json数组
+}
+
+## 接下来有待完善，期待你的参与:-)

@@ -1,0 +1,10 @@
+// 数据库连接配置，后面可以考虑使用jndi
+// generate by longkai@2013-08
+{
+    "driver": "com.mysql.jdbc.Driver",
+    "url": "jdbc:mysql://localhost/lab",
+    "username": "root",
+    "password": "root",
+    "auto_commit": false,
+	"validation_query": "SELECT 1"
+}

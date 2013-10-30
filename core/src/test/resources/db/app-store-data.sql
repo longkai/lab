@@ -1,0 +1,84 @@
+-- created by longkai@2013-08-13
+CREATE TABLE apps (
+  id                  BIGINT(20) AUTO_INCREMENT                                        NOT NULL,
+  name                VARCHAR(30)                                                      NOT NULL,
+  uid                 BIGINT                                                           NOT NULL,
+  category            ENUM ('DEFAULT', 'GAME', 'INDIVIDUAL', 'EMTERTAINMENT', 'STUDY') NOT NULL,
+  platform            ENUM ('APPLE', 'ANDROID', 'WINDOWS', 'FIREFOX')                  NOT NULL,
+  os_requirement      VARCHAR(30)                                                      NOT NULL,
+  description         VARCHAR(255)                                                     NOT NULL,
+  total_install_count BIGINT(20) DEFAULT 0                                             NOT NULL,
+  icon                VARCHAR(255),
+  outside_link        VARCHAR(255),
+  rate                BIGINT(20) DEFAULT 0                                             NOT NULL,
+  rate_count          INT DEFAULT 0                                                    NOT NULL,
+  extra               VARCHAR(255),
+  created_date        DATETIME                                                         NOT NULL,
+  CONSTRAINT pk_apps PRIMARY KEY (id),
+  CONSTRAINT fk_member_apps FOREIGN KEY (uid) REFERENCES members (id)
+)
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE app_versions (
+  id            BIGINT(20) AUTO_INCREMENT,
+  app_id        BIGINT(20)           NOT NULL,
+  version       VARCHAR(30)          NOT NULL,
+  update_date   DATETIME             NOT NULL,
+  install_count BIGINT(20) DEFAULT 0 NOT NULL,
+  size          BIGINT(20)           NOT NULL,
+  update_info   VARCHAR(255)         NOT NULL,
+  uri           VARCHAR(255) DEFAULT NULL,
+  extra         VARCHAR(255) DEFAULT NULL,
+  CONSTRAINT pk_app_versions PRIMARY KEY (id),
+  CONSTRAINT fk_app_app_versions FOREIGN KEY (app_id) REFERENCES apps (id)
+)
+  DEFAULT CHARSET = utf8;
+
+CREATE TABLE app_comments (
+  id           BIGINT(20) AUTO_INCREMENT,
+  uid          BIGINT(20)   NOT NULL,
+  nick         VARCHAR(20)  NOT NULL,
+  app_id       BIGINT(20)   NOT NULL,
+  rate         TINYINT(1)   NOT NULL,
+  useful_count TINYINT(2) DEFAULT 0,
+  comment      VARCHAR(255) NOT NULL,
+  rate_date    DATETIME     NOT NULL,
+  CONSTRAINT pk_app_comments PRIMARY KEY (id),
+  CONSTRAINT fk_app_app_comments FOREIGN KEY (app_id) REFERENCES apps (id)
+)
+  DEFAULT CHARSET = utf8;
+
+INSERT INTO apps (id, name, uid, category, platform, os_requirement, description, total_install_count, icon, outside_link, rate, rate_count, extra, created_date)
+  VALUES (null, 'android app1', 1, 'GAME', 'ANDROID', 'android 2.1以上', 'app1...', 10, null, null, 17, 4, null, '2013-08-1');
+INSERT INTO apps (id, name, uid, category, platform, os_requirement, description, total_install_count, icon, outside_link, rate, rate_count, extra, created_date)
+  VALUES (null, 'apple app2', 2, 'INDIVIDUAL', 'APPLE', 'ios 5以上', 'app2...', 110, null, null, 0, 0, null, '2013-08-2');
+INSERT INTO apps (id, name, uid, category, platform, os_requirement, description, total_install_count, icon, outside_link, rate, rate_count, extra, created_date)
+  VALUES (null, 'windows app3', 3, 'EMTERTAINMENT', 'WINDOWS', 'windows8以上', 'app3...', 3, null, null, 0, 0, null, '2013-08-8');
+INSERT INTO apps (id, name, uid, category, platform, os_requirement, description, total_install_count, icon, outside_link, rate, rate_count, extra, created_date)
+  VALUES (null, 'android app3', 1, 'STUDY', 'ANDROID', 'android 4.0以上', 'app3...', 76, null, null, 0, 0, null, '2013-08-10');
+
+INSERT INTO app_versions (id, app_id, version, update_date, install_count, size, update_info, uri, extra)
+  VALUES (null, 1, '1.1.0', '2013-08-1', 3, 1000000, 'new app.', '/', 'no extra');
+INSERT INTO app_versions (id, app_id, version, update_date, install_count, size, update_info, uri)
+  VALUES (null, 1, '1.2.0', '2013-08-3', 4, 1000400, 'new update!bug fix.', '/');
+INSERT INTO app_versions (id, app_id, version, update_date, install_count, size, update_info, uri)
+  VALUES (null, 1, '1.3.0', '2013-08-5', 3, 1006000, 'new update!bug fix.', '/');
+INSERT INTO app_versions (id, app_id, version, update_date, install_count, size, update_info, uri)
+  VALUES (null, 2, '1.0', '2013-08-2', 110, 1006000, 'new app.', '/');
+INSERT INTO app_versions (id, app_id, version, update_date, install_count, size, update_info, uri)
+  VALUES (null, 3, '1.0', '2013-08-8', 3, 16000, 'new app.', '/');
+INSERT INTO app_versions (id, app_id, version, update_date, install_count, size, update_info, uri)
+  VALUES (null, 4, '1.0', '2013-08-10', 76, 100432, 'new app.', '/');
+
+INSERT INTO app_comments (id, uid, nick, app_id, rate, useful_count, comment, rate_date) VALUES (
+  null, 1, 'user1', 1, 5, 1, 'very good!', '2013-08-2'
+);
+INSERT INTO app_comments (id, uid, nick, app_id, rate, useful_count, comment, rate_date) VALUES (
+  null, 2, 'user2', 1, 4, 0, 'nice', '2013-08-2'
+);
+INSERT INTO app_comments (id, uid, nick, app_id, rate, useful_count, comment, rate_date) VALUES (
+  null, 3, 'user3', 1, 3, 1, 'soso', '2013-08-3'
+);
+INSERT INTO app_comments (id, uid, nick, app_id, rate, useful_count, comment, rate_date) VALUES (
+  null, 4, 'user4', 1, 5, 1, 'very good!', '2013-08-8'
+);

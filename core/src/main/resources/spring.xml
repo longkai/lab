@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ The MIT License (MIT)
+  ~ Copyright 2013 newgxu.cn <the original author or authors>.
+  ~ The software shall be used for good, not evil.
+  ~ generate by longkai@13-8
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <context:annotation-config />
+
+    <bean class="cn.newgxu.lab.core.config.WebMvcConfig" />
+
+    <!--测试数据库ddl以及脚本，会删除表重新注入测试数据，务必使用在开发与测试模式下，其他情况下一定将下面的结点注释或者删除！-->
+    <!--<jdbc:initialize-database data-source="dataSource">-->
+        <!--<jdbc:script location="classpath:db/clear.sql" encoding="UTF-8" execution="INIT" />-->
+        <!--<jdbc:script location="classpath:db/notice-schema.sql" encoding="UTF-8" execution="INIT" />-->
+        <!--<jdbc:script location="classpath:db/member-data.sql" encoding="UTF-8" execution="INIT" />-->
+        <!--<jdbc:script location="classpath:db/notice-data.sql" encoding="UTF-8" execution="INIT" />-->
+        <!--<jdbc:script location="classpath:db/app-store-data.sql" encoding="UTF-8" execution="INIT" />-->
+        <!--<jdbc:script location="classpath:db/impression_schema.sql" encoding="UTF-8" execution="INIT" />-->
+    <!--</jdbc:initialize-database>-->
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.newgxu.lab" />
+        <property name="markerInterface" value="cn.newgxu.lab.core.repository.CommonRepo" />
+    </bean>
+</beans>

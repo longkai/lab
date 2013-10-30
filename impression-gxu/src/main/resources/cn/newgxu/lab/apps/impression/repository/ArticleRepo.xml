@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ~ The MIT License (MIT)
+  ~ Copyright (c) 2013 newgxu.cn <the original author or authors>.
+  ~ The software shall be used for good, not evil.
+  ~ create by longkai@2013-9-14
+  -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.newgxu.lab.apps.impression.repository.ArticleRepo">
+    <cache />
+
+    <select id="find" parameterType="_long" resultType="article">
+        SELECT * FROM articles WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="article" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO articles
+            (id, title, category, layout, content, recommended, top, blocked, added_date, last_modified_date, author_name, author_contact, author_about)
+        VALUES
+            (null, #{title}, #{category}, #{layout}, #{content}, #{recommended}, #{top}, #{blocked}, #{added_date}, #{last_modified_date}, #{author_name}, #{author_contact}, #{author_about})
+    </insert>
+
+    <select id="count" resultType="_long">
+        SELECT COUNT(1) FROM
+        <choose>
+            <when test="from != null">
+                ${from}
+            </when>
+            <otherwise>
+	            articles
+            </otherwise>
+        </choose>
+        <if test="where != null">
+            WHERE ${where}
+        </if>
+    </select>
+
+    <delete id="delete">
+        DELETE FROM
+        <choose>
+            <when test="from != null">
+                ${from}
+            </when>
+            <otherwise>
+	            articles
+            </otherwise>
+        </choose>
+        <if test="where != null">
+            WHERE ${where}
+        </if>
+    </delete>
+
+    <update id="update">
+        UPDATE articles SET ${update} WHERE ${where}
+    </update>
+
+    <select id="findOne" resultType="article">
+        SELECT
+        <choose>
+            <when test="columns == null">
+                *
+            </when>
+            <otherwise>
+                ${columns}
+            </otherwise>
+        </choose>
+        FROM
+        <choose>
+            <when test="from != null">
+                ${from}
+            </when>
+            <otherwise>
+	            articles
+            </otherwise>
+        </choose>
+        <if test="where != null">
+            WHERE ${where}
+        </if>
+    </select>
+
+    <select id="query" resultType="article">
+        SELECT
+        <choose>
+            <when test="columns == null">
+                *
+            </when>
+            <otherwise>
+                ${columns}
+            </otherwise>
+        </choose>
+        FROM
+        <choose>
+            <when test="from != null">
+                ${from}
+            </when>
+            <otherwise>
+	            articles
+            </otherwise>
+        </choose>
+        <if test="where != null">
+            WHERE ${where}
+        </if>
+        <if test="groupBy != null">
+            GROUP BY ${groupBy}
+        </if>
+        <if test="having != null">
+            HAVING ${having}
+        </if>
+        <if test="orderBy != null">
+            ORDER BY ${orderBy}
+        </if>
+        <if test="limit != null">
+            LIMIT ${limit}
+        </if>
+    </select>
+</mapper>

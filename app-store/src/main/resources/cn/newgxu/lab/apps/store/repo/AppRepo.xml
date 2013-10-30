@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+  ~ The MIT License (MIT)
+  ~ Copyright (c) 2013 longkai(龙凯)
+  ~ The software shall be used for good, not evil.
+  -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.newgxu.lab.apps.store.repo.AppRepo">
+    <cache />
+
+    <resultMap id="app" type="app" autoMapping="true">
+        <id column="id" property="id" />
+        <association property="author" resultMap="member" />
+    </resultMap>
+
+    <resultMap id="member" type="member" autoMapping="true">
+        <id column="uid" property="id" />
+        <result column="_uid" property="uid" />
+        <result column="_description" property="description" />
+    </resultMap>
+
+    <sql id="app_columns">
+        A.id,
+        A.name,
+        A.uid,
+        A.category,
+        A.platform,
+        A.os_requirement,
+        A.description,
+        A.total_install_count,
+        A.icon,
+        A.rate,
+        A.rate_count,
+        A.extra,
+        A.created_date
+    </sql>
+
+    <sql id="member_columns">
+        M.uid as _uid,
+        M.comefrom,
+        M.nick,
+        M.label,
+        M.invalid,
+        M.contact,
+        M.description as _description,
+        M.participate_date,
+        M.last_modified_date
+    </sql>
+
+    <insert id="insert" parameterType="app" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO apps
+         (id, name, uid, category, platform, os_requirement, description, total_install_count, icon, outside_link, rate, rate_count, extra, created_date)
+        VALUES
+         (null, #{name}, #{author.id}, #{category}, #{platform}, #{os_requirement}, #{description}, 0, #{icon}, #{outside_link}, 0, 0, #{extra}, #{created_date});
+    </insert>
+
+    <select id="find" parameterType="_long" resultMap="app">
+        SELECT
+        <include refid="app_columns" />
+        ,
+        <include refid="member_columns" />
+        FROM
+        apps as A JOIN members as M on A.uid = M.id
+        WHERE A.id = #{id}
+    </select>
+
+    <select id="count" resultType="_long">
+        SELECT COUNT(1) FROM
+        <choose>
+            <when test="from != null">
+                ${from}
+            </when>
+            <otherwise>
+                apps
+            </otherwise>
+        </choose>
+        <if test="where != null">
+            WHERE ${where}
+        </if>
+    </select>
+
+    <delete id="delete">
+        DELETE FROM
+        <choose>
+            <when test="from != null">
+                ${from}
+            </when>
+            <otherwise>
+                apps
+            </otherwise>
+        </choose>
+        <if test="where != null">
+            WHERE ${where}
+        </if>
+    </delete>
+
+    <update id="update">
+        UPDATE apps SET ${update} WHERE ${where}
+    </update>
+
+    <select id="findOne" resultMap="app">
+        SELECT
+        <choose>
+            <when test="columns == null">
+                <include refid="app_columns" />
+                ,
+                <include refid="member_columns" />
+            </when>
+            <when test="@cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+                <include refid="app_columns" />
+            </when>
+            <otherwise>
+                ${columns}
+            </otherwise>
+        </choose>
+        FROM
+        <choose>
+            <when test="from == null and @cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+                apps as A
+            </when>
+            <when test="from != null">
+                ${from}
+            </when>
+            <otherwise>
+                apps as A JOIN members as M on A.uid = M.id
+            </otherwise>
+        </choose>
+        <if test="where != null">
+            WHERE ${where}
+        </if>
+    </select>
+
+    <select id="query" resultMap="app">
+        SELECT
+        <choose>
+            <when test="columns != null">
+                ${columns}
+            </when>
+            <when test="@cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+                <include refid="app_columns" />
+            </when>
+            <otherwise>
+                <include refid="app_columns" />
+                ,
+                <include refid="member_columns" />
+            </otherwise>
+        </choose>
+        FROM
+        <choose>
+            <when test="from == null and @cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+                apps as A
+            </when>
+            <when test="from != null">
+                ${from}
+            </when>
+            <otherwise>
+                apps as A JOIN members as M on A.uid = M.id
+            </otherwise>
+        </choose>
+        <if test="where != null">
+            WHERE ${where}
+        </if>
+        <if test="groupBy != null">
+            GROUP BY ${groupBy}
+        </if>
+        <if test="having != null">
+            HAVING ${having}
+        </if>
+        <if test="orderBy != null">
+            ORDER BY ${orderBy}
+        </if>
+        <if test="limit != null">
+            LIMIT ${limit}
+        </if>
+    </select>
+</mapper>

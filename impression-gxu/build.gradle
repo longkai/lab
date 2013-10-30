@@ -1,0 +1,12 @@
+apply plugin: 'war'
+
+task createWebProject(dependsOn: 'createJavaProject') << {
+    def webAppDir = file("$webAppDirName")
+    webAppDir.mkdirs()
+}
+
+dependencies {
+    compile project(':core')
+    providedCompile "javax.servlet:servlet-api:$servletAPI"
+    testCompile "org.springframework:spring-test:$spring"
+}

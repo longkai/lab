@@ -1,0 +1,13 @@
+out/
+build/
+.gradle/
+*.iml
+.idea/
+out/
+
+.settings/
+.classpath
+.project
+
+libs/
+*~

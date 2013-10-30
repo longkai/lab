@@ -1,0 +1,27 @@
+apply plugin: 'war'
+dependencies {
+	compile project(':util')
+    compile "javax.inject:javax.inject:$javaxInject",
+            "org.springframework:spring-core:$spring",
+            "org.springframework:spring-beans:$spring",
+            "org.springframework:spring-context:$spring",
+            "org.springframework:spring-context-support:$spring",
+            "org.springframework:spring-jdbc:$spring",
+            "org.springframework:spring-tx:$spring",
+            "org.springframework:spring-web:$spring",
+            "org.springframework:spring-webmvc:$spring",
+            "org.freemarker:freemarker:$freemarker",
+            "com.fasterxml.jackson.core:jackson-core:$jackson2",
+            "com.fasterxml.jackson.core:jackson-databind:$jackson2",
+            "org.mybatis:mybatis:$mybatis",
+            "org.mybatis:mybatis-spring:$mybatisSpring",
+            "org.apache.tomcat:tomcat-jdbc:$tomcatJdbc",
+            "mysql:mysql-connector-java:$mysqlJdbc",
+            "org.slf4j:jcl-over-slf4j:$slf4j",
+            "org.slf4j:slf4j-api:$slf4j",
+            "ch.qos.logback:logback-classic:$logback",
+            "commons-fileupload:commons-fileupload:$commonsFileupload"
+    providedCompile "javax.servlet:servlet-api:$servletAPI"
+    testCompile "org.springframework:spring-test:$spring"
+}
+

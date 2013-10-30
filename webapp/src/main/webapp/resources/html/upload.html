@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Fine Uploader - jQuery Wrapper Minimal Demo</title>
+    <link href="http://cdn.staticfile.org/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet"
+          media="" />
+    <link href="/resources/libs/fineuploader/3.7.1/fineuploader-3.7.1.min.css" rel="stylesheet">
+    <style type="text/css">
+        .span12 {
+            margin: 0 0 10px 0;
+        }
+
+        .qq-upload-button {
+            background-color: #62c462;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="jquery-wrapped-fine-uploader"></div>
+    <noscript>
+        <p>Please enable JavaScript to use Fine Uploader.</p>
+        <!-- or put a simple form for upload here -->
+    </noscript>
+</div>
+
+
+<div class="container">
+    <button id="triggerUpload" class="btn btn-info span12">
+        <i class="icon-upload icon-white"></i> 上传!
+    </button>
+
+    <div id="alert"></div>
+</div>
+
+<script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script src="/resources/libs/fineuploader/3.7.1/jquery.fineuploader-3.7.1.min.js"></script>
+<script>
+    $(function () {
+        $('#jquery-wrapped-fine-uploader').fineUploader({
+            debug: true,
+            autoUpload: false,
+            allowMultipleItems: true,
+            multiple: true,
+            request: {
+                inputName: 'files',
+                endpoint: '/uploads'
+            },
+            validation: {
+                itemLimit: 3,
+                allowedExtensions: ['jpeg', 'jpg', 'png', 'txt'],
+                sizeLimit: 512000 // 50 kB = 50 * 1024 bytes
+            },
+            editFilename: {
+                enabled: true
+            },
+            text: {
+                uploadButton: '<i class="icon-upload icon-white"></i> 请选择文件或者将文件拖放到此处'
+            },
+            template: '<div class="qq-uploader span12">' +
+                    '<pre class="qq-upload-drop-area span12"><span>{dragZoneText}</span></pre>' +
+                    '<div class="qq-upload-button btn btn-success" style="width: auto;">{uploadButtonText}</div>' +
+                    '<span class="qq-drop-processing"><span>{dropProcessingText}</span><span class="qq-drop-processing-spinner"></span></span>' +
+                    '<ul class="qq-upload-list" style="margin-top: 10px; text-align: center;"></ul>' +
+                    '</div>',
+            classes: {
+                success: 'alert alert-success',
+                fail: 'alert alert-error'
+            },
+            callbacks: {
+                onComplete: function (p1, p2, p3, p4) {
+                    alert("xxx");
+                }
+            },
+            showMessage: function (message) {
+                // Using Bootstrap's classes
+                $('#alert').append('<div class="alert alert-error lead">' + message + '</div>');
+            }
+
+        }).on({
+                    "complete": function (event, id, fileName, responseJSON) {
+                        console.log(responseJSON);
+                        if (responseJSON.success) {
+                            alert(responseJSON.success);
+                        }
+                    }
+                });
+
+    })
+    $('#triggerUpload').click(function () {
+        $('#jquery-wrapped-fine-uploader').fineUploader('uploadStoredFiles');
+    });
+</script>
+</body>
+</html

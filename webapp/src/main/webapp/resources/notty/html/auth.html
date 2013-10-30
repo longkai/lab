@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>用户认证 - 校园信息</title>
+<meta name="keywords" content=" 雨无声实验室 广西大学 广西大学雨无声网站 龙凯 longkai @爱因斯坦的狗 im.longkai@gmail.com" />
+<meta name="description" content=" 雨无声实验室 广西大学 广西大学雨无声网站 龙凯 longkai @爱因斯坦的狗 im.longkai@gmail.com" />
+<meta name="author" content="龙凯 longkai @爱因斯坦的狗" />
+<meta name="email" content="im.longkai@gmail.com" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/resources/libs/bootstrap/2.3.1/css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" href="/resources/libs/bootstrap/2.3.1/css/bootstrap-responsive.min.css" media="screen" />
+<!--[if lt IE 9]>
+<script src="//cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<![endif]-->
+<style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+@media (max-width: 980px) {
+	body {
+		padding-top: 0px;
+	}
+}
+#auth {
+	max-width: 680px;
+	margin: 20px auto;
+}
+.alert {
+	display: none;
+}
+</style>
+</head>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="brand" href="#">校园信息</a>
+			<div class="nav-collapse collapse">
+				<ul class="nav">
+					<li><a href="/notice/">首页</a></li>
+					<li><a href="/resources/html/info/auth.html">认证</a></li>
+					<li><a href="/resources/html/info/help.html">帮助</a></li>
+					<li><a href="#">服务条款</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							雨无声实验室 <b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="/">首页</a></li>
+							<li><a href="/about.html">关于实验室</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container" id="auth">
+	<div class="modal-header">
+		<h3>雨无声信息发布条款</h3>
+	</div>
+	<div class="modal-body">
+		<p>请阅读雨无声校园信息发布条款</p>
+		<ol>
+			<li>发布信息时请您认证审核，必须符合国家法律以及学校规定</li>
+			<li>您所发布的信息并不代表雨无声的立场</li>
+			<li>对于违规用户，雨无声有权回收帐号</li>
+			<li>本应用在较旧的浏览器上表现不佳，为了获得较好的使用体验，请使用较新的浏览器</li>
+			<li>雨无声承诺保护您的隐私和数据，不会做任何干涉。本条款的最终解释权归雨无声所有。</li>
+		</ol>
+		<div class="pull-right">
+			<button class="btn btn-danger" id="no" data-dismiss="" aria-hidden="true">拒绝</button>
+			<button class="btn btn-success" id="yes" data-dismiss="" aria-hidden="true">接受</button>
+		</div>
+	</div>
+
+	<div class="control-group hide" id="dl">
+		请下载 <a href="/resources/docs/info/application.doc" class="lead">雨无声校园信息发布平台认证申请书</a> 填写好相关内容后 交到雨无声办公室 即可获得授权:-)</p>
+	</div>
+</div>
+</body>
+<script src="//libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script src="//libs.baidu.com/bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    !window.jQuery && document.write('<script src="/resources/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"><\/script>'
+            + '<script src="/resources/libs/bootstrap/2.3.1/js/bootstrap.min.js" type="text/javascript"><\/script>');
+</script>
+<script type="text/javascript">
+$(function() {
+	$('#yes').click(function(e) {
+		e.preventDefault();
+		$('#dl').show();
+	})
+	$('#no').click(function(e) {
+		e.preventDefault();
+		$('#dl').hide();
+	})
+	// $('#yes').click(function() {
+	// 	$('.alert').hide();
+	// 	$.ajax({
+	// 		url: 		'/info/users',
+	// 		type: 		'POST',
+	// 		data: 		$('#auth_form').serialize(),
+	// 		dataType: 	'json',
+	// 		success: function(data) {
+	// 			if (data.status === 1) {
+	// 				$('#authed_name').text(data.author.authed_name);
+	// 				$('#success').fadeIn();
+	// 			} else if (data.status === 0) {
+	// 				$('#info').text(data.msg);
+	// 				$('#reason').text('原因：' + data.reason);
+	// 				$('#error').fadeIn();
+	// 			} else {
+	// 				$('#error').fadeIn();
+	// 			}
+	// 		},
+	// 		error: function() {
+	// 			$('#error').fadeIn();
+	// 		}
+	// 	})
+	// 	$(':password').val('');
+	// 	return true;
+	// })
+})
+</script>
+</html>

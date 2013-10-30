@@ -1,0 +1,31 @@
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'idea'
+
+	version = '1.0.0'
+
+	sourceCompatibility = 1.6
+	targetCompatibility = 1.6
+
+	repositories {
+		jcenter()
+        mavenCentral()
+	}
+
+	configurations {
+		all*.exclude group: 'commons-logging', name: 'commons-logging'
+	}
+
+	dependencies {
+		testCompile "junit:junit:$junit"
+	}
+
+	task createJavaProject << {
+		sourceSets*.java.srcDirs*.each { it.mkdirs() }
+		sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+	}
+
+    tasks.withType(Compile) {
+        options.encoding = 'UTF-8'
+    }
+}

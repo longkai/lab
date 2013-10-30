@@ -1,0 +1,7 @@
+// 文件上传配置默认路径
+// 注意，这个是使用commons-fileupload的配置，若使用servlet-api 3.0，请移步web.xml
+{
+    "file_system_root_path": "D:/",
+    "web_root_path": "/resources/upload/",
+	"fine_uploader_file_name": "qqfilename"
+}
