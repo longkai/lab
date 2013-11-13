@@ -7,6 +7,7 @@ package cn.newgxu.lab.apps.notty.repository;
 
 import cn.newgxu.lab.apps.notty.entity.AuthorizedUser;
 import cn.newgxu.lab.core.repository.CommonRepo;
+import org.springframework.stereotype.Repository;
 
 /**
  * 认证用户数据访问接口。
@@ -15,6 +16,7 @@ import cn.newgxu.lab.core.repository.CommonRepo;
  * @Date 13-3-28
  * @Mail im.longkai@gmail.com
  */
+@Repository
 public interface AuthRepo extends CommonRepo<AuthorizedUser> {
 
     String TABLE = "auth_users";

@@ -42,15 +42,19 @@
 
 ## 子项目结构说明
 util 项目工具类
+
 core 核心类
+
 notty 校园信息应用
-app=store 应用市场
+
+app-store 应用市场
+
 webapp 存放web资源相关，静态文件，资源模版等
 
 ## 软件要求
 1. jdk6+
 2. gradle (请google，版本1.6+)
-3. 推荐使用intellij ieaa或者eclipse作为IDE(版本越新越好，在idea 12.1及eclipse 3.7.2测试通过)
+3. 推荐使用intellij idea或者eclipse作为IDE(版本越新越好，在idea 12.1及eclipse 3.7.2测试通过)
 4. mysql(越新越好，测试版本为5.5.29)
 5. 流畅的网络环境，方便下载第三方依赖（或者你本地有一个gradle或者maven包含项目所需依赖的仓库）
 
@@ -80,6 +84,7 @@ webapp 存放web资源相关，静态文件，资源模版等
 4. 运行（命令行，如果ide支持gradle，也可直接在ide中运行，请自行查阅文档）
     进入项目根目录，键入 `gradle clean jettyRun`，若无错误信息或者异常，那么浏览器地址栏输入http://localhost即可
 5. 导入ide（可选）
+
     5.1 idea 如果使用intellij idea，那么命令行进入项目根目录，键入`gradle idea`, 成功之后在idea中将项目导入即可
     5.2 eclipse 如果使用eclipse，那么需要修改build.gradle文件的第三行，将idea换成eclipse即可，保存后命令行进入项目根目录，键入`gradle eclipse`，成功之后再eclipse中将项目导入即可
 

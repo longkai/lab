@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public void delete(long id) {
         int i = commentRepo.delete(null, "id=" + id);
-        l.info("comment: {} delete successfully with alter count: {} i");
+	    l.info("comment: {} delete successfully with alter count: {}", i);
     }
 
     @Override

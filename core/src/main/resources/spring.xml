@@ -27,6 +27,6 @@
 
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="cn.newgxu.lab" />
-        <property name="markerInterface" value="cn.newgxu.lab.core.repository.CommonRepo" />
+	    <property name="annotationClass" value="org.springframework.stereotype.Repository" />
     </bean>
 </beans>

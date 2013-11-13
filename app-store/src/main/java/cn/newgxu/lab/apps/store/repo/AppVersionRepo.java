@@ -7,6 +7,7 @@ package cn.newgxu.lab.apps.store.repo;
 
 import cn.newgxu.lab.apps.store.entity.AppVersion;
 import cn.newgxu.lab.core.repository.CommonRepo;
+import org.springframework.stereotype.Repository;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,6 +16,7 @@ import cn.newgxu.lab.core.repository.CommonRepo;
  * @Date 13-8-14
  * @Mail im.longkai@gmail.com
  */
+@Repository
 public interface AppVersionRepo extends CommonRepo<AppVersion> {
 
     String TABLE = "app_versions";

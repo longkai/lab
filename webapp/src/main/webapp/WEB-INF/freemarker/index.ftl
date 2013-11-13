@@ -174,8 +174,8 @@
                     <ul class="nav">
                         <li><a href="#">关于</a></li>
                         <li><a href="#">服务条款</a></li>
-                        <li><a href="//github.com/longkai/lab.newgxu.cn/commits/master" target="_blank">更新说明</a></li>
-                        <li><a href="//longkai.github.io/lab.newgxu.cn/" target="_blank">实验室开源项目</a></li>
+                        <li><a href="//github.com/longkai/lab/commits/master" target="_blank">更新说明</a></li>
+                        <li><a href="//github.com/longkai/lab/" target="_blank">实验室开源项目</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">实验室产品 <b class="caret"></b></a>
                             <ul class="dropdown-menu">
