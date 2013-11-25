@@ -18,13 +18,14 @@
 最后，希望这个或多或少对大家有用:-)
 
 ### 文档更新时间
-2013-10-30 longkai im.longkai@gmail.com
+2013-11-26 longkai im.longkai@gmail.com
 
 ### 重要事项
 实验室项目虽然已经正式上线，但是一些子项目目前仍在持续完善中，会有一些bug，请谅解:-)
 
 本项目只包含服务端及html等试图代码，Android客户端和其他项目的代码可以在(htpps://github.com/longkai)找到:-)
 
+另外，``.gitignore``的中忽略的``webapp/src/main/webapp/resources/libs/``文件需要在这里下载: http://pan.baidu.com/s/15oLqT
 ## 已知问题（重要非紧急）
 1. 在gradle中执行多项目测试会导致路径失败的问题（在ide中对子项目执行测试无问题）
 2. 嵌入式数据库脚本必须放置在src/main目录下才可使用
