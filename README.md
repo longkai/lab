@@ -18,14 +18,14 @@
 最后，希望这个或多或少对大家有用:-)
 
 ### 文档更新时间
-2013-11-26 longkai im.longkai@gmail.com
+2013-12-3 longkai im.longkai@gmail.com
 
 ### 重要事项
 实验室项目虽然已经正式上线，但是一些子项目目前仍在持续完善中，会有一些bug，请谅解:-)
 
 本项目只包含服务端及html等试图代码，Android客户端和其他项目的代码可以在(htpps://github.com/longkai)找到:-)
 
-另外，``.gitignore``的中忽略的``webapp/src/main/webapp/resources/libs/``文件需要在这里下载: http://pan.baidu.com/s/15oLqT
+另外，``.gitignore``的中忽略的``webapp/src/main/webapp/resources/libs/``文件需要在这里下载: http://pan.baidu.com/s/13nL4E
 ## 已知问题（重要非紧急）
 1. 在gradle中执行多项目测试会导致路径失败的问题（在ide中对子项目执行测试无问题）
 2. 嵌入式数据库脚本必须放置在src/main目录下才可使用
@@ -64,39 +64,39 @@ webapp 存放web资源相关，静态文件，资源模版等
 其他的要求，暂时不知。。。
 
 ## 重要的配置文件(!开头表示推荐修改的文件)
-1. gradle.properties gradle配置文件，主要是第三方依赖的版本号
-2. settings.gradle 实验室项目所包含的子项目
-3. build.gradle 所有项目的gradle构建配置
-4. !core/src/main/resources/db-config.json 数据库的配置，url，username等
-5. !core/src/main/resources/logback.xml logback日志配置，在这里可以配置文件日志的存放路径，日志级别等内容
-6. !core/src/main/resources/spring.xml spring核心配置文件，包含启动容器时执行嵌入的sql脚本以及Javaconfig的类
-7. core/src/main/resources/db/ 项目的嵌入sql脚本（在运行时执行，见配置6）
-8. webapp/src/main/resources/uri.json 静态uri与视图文件的匹配表
-9. webapp/src/main/resources/freemarker.json freemarker模版配置（freemarker.properties的json格式:-)）
-10. !webapp/src/main/resources/file-upload.json 文件上传的目录配置
-11. webapp/build.gradle jetty配置（port与context path）
-11. core/src/main/java/cn/newgxu/lab/core/config/SpringBeans.java spring javaconfig基本beans配置
-12. core/src/main/java/cn/newgxu/lab/core/config/WebMvcConfig.java spring javaconfig web 相关配置(内容协商协议，视图等)
-
+1. ``gradle.properties`` gradle配置文件，主要是第三方依赖的版本号
+2. ``settings.gradle`` 实验室项目所包含的子项目
+3. ``build.gradle`` 所有项目的gradle构建配置
+4. ``!webapp/src/main/resources/db-config.json`` 数据库的配置，url，username等
+5. ``!webapp/src/main/resources/logback.xml`` logback日志配置，在这里可以配置文件日志的存放路径，日志级别等内容
+6. ``!core/src/main/resources/spring.xml`` spring核心配置文件，包含启动容器时执行嵌入的sql脚本以及Javaconfig的类
+7. ``core/src/test/resources/db/`` 项目的嵌入sql脚本（在运行时执行，见配置6）
+8. ``webapp/src/main/resources/uri.json`` 静态uri与视图文件的匹配表
+9. ``webapp/src/main/resources/freemarker.json`` freemarker模版配置（freemarker.properties的json格式:-)）
+10. ``!webapp/src/main/resources/file-upload.json`` 文件上传的目录配置
+11. ``webapp/build.gradle`` jetty配置（port与context path）
+11. ``core/src/main/java/cn/newgxu/lab/core/config/SpringBeans.java`` spring javaconfig基本beans配置
+12. ``core/src/main/java/cn/newgxu/lab/core/config/WebMvcConfig.java`` spring javaconfig web 相关配置(内容协商协议，视图等)
+13. ``core/src/test/resources/db-config.json`` 测试时用到的数据库配置，和**4**一致
 ## 如何运行
 1. 确保达到了软件要求（ide非必需）
-2. mysql数据库与 core/src/main/resources/db-config.json 匹配
+2. mysql数据库与 ``core/src/test/resources/db-config.json`` 匹配(或者，修改``core/src/main/resources/spring.xml``，这样所有表数据会在jetty启动时自行导入，前提是这个数据库要存在！！！导入的顺序也许这个配置一样！)
 3. 修改你想要修改的配置文件内容（见重要的配置文件）
 4. 运行（命令行，如果ide支持gradle，也可直接在ide中运行，请自行查阅文档）
-    进入项目根目录，键入 `gradle clean jettyRun`，若无错误信息或者异常，那么浏览器地址栏输入http://localhost即可
+    进入项目根目录，键入 ``gradle clean jettyRun``，若无错误信息或者异常，那么浏览器地址栏输入http://localhost即可
 5. 导入ide（可选）
 
-    5.1 idea 如果使用intellij idea，那么命令行进入项目根目录，键入`gradle idea`, 成功之后在idea中将项目导入即可
-    5.2 eclipse 如果使用eclipse，那么需要修改build.gradle文件的第三行，将idea换成eclipse即可，保存后命令行进入项目根目录，键入`gradle eclipse`，成功之后再eclipse中将项目导入即可
+    5.1 idea 如果使用intellij idea，那么命令行进入项目根目录，键入``gradle idea``, 成功之后在idea中将项目导入即可
+    5.2 eclipse 如果使用eclipse，那么需要修改build.gradle文件的第三行，将idea换成eclipse即可，保存后命令行进入项目根目录，键入``gradle eclipse``，成功之后再eclipse中将项目导入即可
 
 ## 如何添加项目
 1. 如果没有使用过gradle，请先查阅gradle的官方文档
-2. 根项目下的`build.gradle`是项目的核心配置，一定要看过
+2. 根项目下的``build.gradle``是项目的核心配置，一定要看过
 3. 在settings.gradle中添加一个子项目的名字，参考原有的
-4. 在根目录下添加你的项目（名字一定要和`settings.gradle`中一样），项目的文件结构可以自己手动建立，也可以使用gradle脚本
-5. 如果有需要，配置项目的`build.gradle`，参考一下原有的项目配置
-6. 注意事项，如果是web项目，不需要使用jetty，使用war插件就好，如果包含模板文件，请统一放置到webapp/src/main/webapp/WEB-INF/freemarker下（假设使用freemarker，使用jsp就是替换掉freemarker而已）
-7. 如果包含静态文件（html，js，css）等，请同意放置在webapp/src/main/webapp/resources/下，统一放置在一个已自己项目命名目录下
+4. 在根目录下添加你的项目（名字一定要和``settings.gradle``中一样），项目的文件结构可以自己手动建立，也可以使用gradle脚本
+5. 如果有需要，配置项目的``build.gradle``，参考一下原有的项目配置
+6. 注意事项，如果是web项目，不需要使用jetty，使用war插件就好，如果包含模板文件，请统一放置到``webapp/src/main/webapp/WEB-INF/freemarker``下（假设使用freemarker，使用jsp就是替换掉freemarker而已）
+7. 如果包含静态文件（html，js，css）等，请同意放置在``webapp/src/main/webapp/resources/``下，统一放置在一个已自己项目命名目录下
 8. 如果有任何问题，请先查看原有的项目（如notty的配置），如有疑问，请邮件im.longkai@gmail.com
 
 =========================
