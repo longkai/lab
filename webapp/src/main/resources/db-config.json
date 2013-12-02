@@ -6,5 +6,5 @@
     "username": "root",
     "password": "root",
     "auto_commit": false,
-	"validation_query": "SELECT 1"
+    "validation_query": "SELECT 1"
 }

@@ -54,7 +54,7 @@ footer {
 		</tr>
 </#list>
 	</table>
-	<button id="more" class="btn btn-block" uid="${Session.auth_user.id}">查看更多！</button>
+	<button id="more" class="btn btn-block" uid="${Session.session_auth_user.id}">查看更多！</button>
 </div>
 
 <table id="template">
