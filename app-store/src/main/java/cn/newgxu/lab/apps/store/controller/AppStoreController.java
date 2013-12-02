@@ -151,10 +151,10 @@ public class AppStoreController {
 			byte[] bytes = (byte[]) session.getAttribute(STAGED_ICON);
 			Assert.notNull("we' re sorry, you need to upload your app' s icon again.", bytes);
 			String fileName = (String) session.getAttribute(STAGED_FILE_NAME);
-			iconUri = FileTransfer.fileTransfer(bytes, UploadPath.FILE_SYSTEM_ROOT_PATH, "apps/" + member.getId(),
+			iconUri = FileTransfer.fileTransfer(bytes, UploadPath.FILE_SYSTEM_UPLOAD_PATH, "apps/" + member.getId(),
 					MAX_ICON_SIZE, ICON_EXTS, fileName, true);
 
-			binUri = FileTransfer.fileTransfer(bin.getBytes(), UploadPath.FILE_SYSTEM_ROOT_PATH, "apps/" + member.getId(),
+			binUri = FileTransfer.fileTransfer(bin.getBytes(), UploadPath.FILE_SYSTEM_UPLOAD_PATH, "apps/" + member.getId(),
 					MAX_BINARY_SIZE, BINARY_EXTS, bin.getOriginalFilename(), true);
 		} catch (Exception e) {
 //            clean the dirty files
@@ -171,7 +171,7 @@ public class AppStoreController {
 
 		rootVersion.setSize(bin.getSize());
 		rootVersion.setUri(binUri);
-		rootVersion.getApp().setIcon(UploadPath.WEB_ROOT_PATH + iconUri);
+		rootVersion.getApp().setIcon(UploadPath.UPLOAD_BASE_PATH + iconUri);
 
 		appService.create(rootVersion.getApp(), rootVersion);
 //        clean the session staged files.
@@ -280,7 +280,7 @@ public class AppStoreController {
 		// transaction, if failed, clean the dirty file
 		String binUri = null;
 		try {
-			binUri = FileTransfer.fileTransfer(bin.getBytes(), UploadPath.FILE_SYSTEM_ROOT_PATH, "apps/" + member.getId(),
+			binUri = FileTransfer.fileTransfer(bin.getBytes(), UploadPath.FILE_SYSTEM_UPLOAD_PATH, "apps/" + member.getId(),
 					MAX_BINARY_SIZE, BINARY_EXTS, bin.getOriginalFilename(), true);
 
 			version.setUri(binUri);
@@ -304,14 +304,14 @@ public class AppStoreController {
 
 	@RequestMapping(value = "/apps/{appid}/download/{version}", method = GET)
 	public String download(@PathVariable("appid") long id, @PathVariable("version") long versionId) {
-		return "redirect:" + UploadPath.WEB_ROOT_PATH + appService.download(id, versionId).getUri();
+		return "redirect:" + UploadPath.UPLOAD_BASE_PATH + appService.download(id, versionId).getUri();
 	}
 
 	@RequestMapping(value = "/apps/{appid}/download", method = GET)
 	public String download(@PathVariable("appid") long id) {
 		AppVersion version = appService.findLatestVersion(id);
 		appService.download(id, version.getId());
-		return "redirect:" + UploadPath.WEB_ROOT_PATH + version.getUri();
+		return "redirect:" + UploadPath.UPLOAD_BASE_PATH + version.getUri();
 	}
 
 	@RequestMapping(value = "/apps/{appid}/latest", method = GET)
@@ -379,7 +379,7 @@ public class AppStoreController {
 		String originalIconUri = app.getIcon();
 		String iconUri = null;
 		try {
-			iconUri = FileTransfer.fileTransfer(icon.getBytes(), UploadPath.FILE_SYSTEM_ROOT_PATH, "apps/" + member.getId(),
+			iconUri = FileTransfer.fileTransfer(icon.getBytes(), UploadPath.FILE_SYSTEM_UPLOAD_PATH, "apps/" + member.getId(),
 					MAX_ICON_SIZE, ICON_EXTS, icon.getOriginalFilename(), true);
 			appService.changeIcon(id, iconUri);
 		} catch (Exception e) {

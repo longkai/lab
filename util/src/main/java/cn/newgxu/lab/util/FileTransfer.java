@@ -7,6 +7,9 @@
  */
 package cn.newgxu.lab.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,6 +23,8 @@ import java.util.Arrays;
  * @Mail im.longkai@gmail.com
  */
 public class FileTransfer {
+
+	private static Logger l = LoggerFactory.getLogger(FileTransfer.class);
 
 	private FileTransfer() {
 	}
@@ -59,7 +64,8 @@ public class FileTransfer {
 				throw new RuntimeException("ERROR when writing file!", t);
 			}
 		});
-		return relativePath == null ? fileName : relativePath + "/" + fileName;
+		l.info("upload file to: {} ok!", dir.getPath());
+		return relativePath == null ? fileName : relativePath + fileName;
 	}
 
 	private static void checkSize(final byte[] bytes, long maxSize) {

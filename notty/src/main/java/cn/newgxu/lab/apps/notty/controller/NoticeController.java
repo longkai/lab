@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 import static cn.newgxu.lab.util.ViewConstants.BAD_REQUEST;
@@ -127,7 +128,7 @@ public class NoticeController {
 	    }
 	    String fileUri = null;
 	    try {
-		    fileUri = FileTransfer.fileTransfer(file.getBytes(), UploadPath.FILE_SYSTEM_ROOT_PATH, Notty.UPLOAD_RELATIVE_DIR,
+		    fileUri = FileTransfer.fileTransfer(file.getBytes(), UploadPath.FILE_SYSTEM_UPLOAD_PATH, Notty.UPLOAD_RELATIVE_DIR + getMonth() + "/",
 				    Notty.MAX_FILE_SIZE, Notty.ACCEPT_FILE_TYPE, fileName, true);
 	    } catch (IOException e) {
 		    File f = new File(UploadPath.FILE_SYSTEM_ROOT_PATH + fileUri);
@@ -142,7 +143,7 @@ public class NoticeController {
 		    fileDelete(notice);
 	    }
 
-	    notice.setDocUrl(UploadPath.WEB_ROOT_PATH + fileUri);
+	    notice.setDocUrl(UploadPath.UPLOAD_BASE_PATH + fileUri);
 	    notice.setDocName(fileName);
 	    noticeService.update(notice, user.getId());
 	    return JSON_STATUS_OK;
@@ -271,13 +272,20 @@ public class NoticeController {
 //    }
 
     private void fileDelete(Notice notice) throws RuntimeException {
-        File f = new File(UploadPath.FILE_SYSTEM_ROOT_PATH + notice.getDocUrl());
-        if (!f.delete()) {
-            throw new RuntimeException(Notty.DELETE_FILE_ERROR);
-        }
-        notice.setDocName(null);
+	    String path = UploadPath.FILE_SYSTEM_ROOT_PATH + notice.getDocUrl();
+	    File f = new File(path);
+	    if (f.exists() && !f.delete()) {
+		    throw new RuntimeException(Notty.DELETE_FILE_ERROR);
+	    }
+	    l.info("delete old file: {} ok!", path);
+	    notice.setDocName(null);
         notice.setDocUrl(null);
     }
+
+	private static int getMonth() {
+		Calendar now = Calendar.getInstance();
+		return now.get(Calendar.MONTH) + 1;
+	}
 
     private static Logger l = LoggerFactory.getLogger(NoticeController.class);
 }

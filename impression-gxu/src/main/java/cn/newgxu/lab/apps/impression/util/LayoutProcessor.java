@@ -43,7 +43,7 @@ public class LayoutProcessor {
 				break;
 			case IMAGE_WITH_TEXT:
 //				process image (jpg, jpeg, png)
-				String imageUri = FileTransfer.fileTransfer(file.getBytes(), UploadPath.FILE_SYSTEM_ROOT_PATH, "/articles/" + getMonth() + "/",
+				String imageUri = FileTransfer.fileTransfer(file.getBytes(), UploadPath.FILE_SYSTEM_UPLOAD_PATH, "/articles/" + getMonth() + "/",
 						MAX_IMAGE_SIZE, IMAGE_TYPES, file.getOriginalFilename(), false);
 				article.setContent(TextUtils.concat("{\"image\":\"", imageUri, "\",\"text\":\"", article.getContent(), "\"}"));
 				break;

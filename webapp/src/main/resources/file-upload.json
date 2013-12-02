@@ -1,7 +1,9 @@
 // 文件上传配置默认路径
 // 注意，这个是使用commons-fileupload的配置，若使用servlet-api 3.0，请移步web.xml
 {
+    // 应用在部署到文件系统上的绝对路径
     "file_system_root_path": "D:/",
-    "web_root_path": "/resources/upload/",
+    // 上传文件相对于 file_system_root_path 的存放路径，也是下载路径的根路径
+    "upload_base_path": "/resources/upload/",
 	"fine_uploader_file_name": "qqfilename"
 }

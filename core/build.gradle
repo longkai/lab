@@ -18,7 +18,6 @@ dependencies {
             "org.apache.tomcat:tomcat-jdbc:$tomcatJdbc",
             "mysql:mysql-connector-java:$mysqlJdbc",
             "org.slf4j:jcl-over-slf4j:$slf4j",
-            "org.slf4j:slf4j-api:$slf4j",
             "ch.qos.logback:logback-classic:$logback",
             "commons-fileupload:commons-fileupload:$commonsFileupload"
     providedCompile "javax.servlet:servlet-api:$servletAPI"

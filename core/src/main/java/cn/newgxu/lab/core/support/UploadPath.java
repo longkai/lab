@@ -33,11 +33,14 @@ public class UploadPath {
 		}
 	}
 
-	/** 上传文件的存放地点（文件系统的绝对路径） */
+	/** 应用在部署到文件系统上的绝对路径 */
 	public static final String FILE_SYSTEM_ROOT_PATH = params.get("file_system_root_path").asText();
 
-	/** web url中上传文件资源的根路径 */
-	public static final String WEB_ROOT_PATH = params.get("web_root_path").asText();
+	/** 上传文件相对于 file_system_root_path 的存放路径，也是下载路径的根路径 */
+	public static final String UPLOAD_BASE_PATH = params.get("upload_base_path").asText();
+
+	/** 文件上传的绝对路径 */
+	public static final String FILE_SYSTEM_UPLOAD_PATH = FILE_SYSTEM_ROOT_PATH + UPLOAD_BASE_PATH;
 
 	/** fine-uploader的用户指定文件名的查询参数名 */
 	public static final String FINE_UPLOADER_FILE_NAME = params.get("fine_uploader_file_name").asText();
