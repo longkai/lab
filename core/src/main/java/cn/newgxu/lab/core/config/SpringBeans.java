@@ -85,7 +85,7 @@ public class SpringBeans {
         return bean;
     }
 
-    @Bean
+    @Bean(name = "transactionManager")
     public PlatformTransactionManager tx() {
         return new DataSourceTransactionManager(dataSource());
     }

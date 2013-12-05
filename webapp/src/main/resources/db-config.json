@@ -2,7 +2,7 @@
 // generate by longkai@2013-08
 {
     "driver": "com.mysql.jdbc.Driver",
-    "url": "jdbc:mysql://localhost/lab",
+    "url": "jdbc:mysql://192.168.1.251/lab",
     "username": "root",
     "password": "root",
     "auto_commit": false,

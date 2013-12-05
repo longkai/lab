@@ -9,7 +9,7 @@ subprojects {
 
 	repositories {
 		jcenter()
-        mavenCentral()
+		mavenCentral()
 	}
 
 	configurations {
@@ -17,7 +17,7 @@ subprojects {
 	}
 
 	dependencies {
-        compile "org.slf4j:slf4j-api:$slf4j"
+		compile "org.slf4j:slf4j-api:$slf4j"
 		testCompile "junit:junit:$junit"
 	}
 
@@ -26,7 +26,7 @@ subprojects {
 		sourceSets*.resources.srcDirs*.each { it.mkdirs() }
 	}
 
-    tasks.withType(Compile) {
-        options.encoding = 'UTF-8'
-    }
+	tasks.withType(Compile) {
+		options.encoding = 'UTF-8'
+	}
 }

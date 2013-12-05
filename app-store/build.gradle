@@ -8,5 +8,5 @@ task createWebProject(dependsOn: 'createJavaProject') << {
 dependencies {
 	compile project(':core')
 	providedCompile "javax.servlet:servlet-api:$servletAPI"
-    testCompile "org.springframework:spring-test:$spring"
+	testCompile "org.springframework:spring-test:$spring"
 }
