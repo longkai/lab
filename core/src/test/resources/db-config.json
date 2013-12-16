@@ -1,8 +1,0 @@
-{
-	"driver": "com.mysql.jdbc.Driver",
-	"url": "jdbc:mysql://192.168.1.251/lab",
-	"username": "root",
-	"password": "root",
-	"auto_commit": false,
-	"validation_query": "SELECT 1"
-}

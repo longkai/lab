@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  ~ The MIT License (MIT)
+  ~ Copyright (c) 2013 newgxu.cn <the original author or authors>.
+  ~ The software shall be used for good, not evil.
+  ~ create by longkai@2013-8-1
+  -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.newgxu.lab.notty.repository.AuthRepo">
+	<cache />
+
+	<resultMap id="auth_user" type="auth_user">
+		<id property="id" column="id" />
+		<result property="authorizedName" column="authed_name" />
+		<result property="org" column="org" />
+		<result property="about" column="about" />
+		<result property="contact" column="contact" />
+		<result property="joinDate" column="join_date" />
+		<result property="blocked" column="blocked" />
+		<result property="account" column="account" />
+		<result property="password" column="password" />
+		<result property="lastLoginIP" column="last_login_ip" />
+		<result property="lastLoginDate" column="last_login_date" />
+		<result property="lastModifiedDate" column="last_modified_date" />
+		<result property="admin" column="is_admin" />
+	</resultMap>
+
+	<select id="find" parameterType="_long" resultMap="auth_user">
+		SELECT
+			*
+		FROM auth_users
+		WHERE id = #{id}
+	</select>
+
+	<insert id="insert" parameterType="auth_user" useGeneratedKeys="true" keyProperty="id"
+			keyColumn="id">
+		INSERT INTO auth_users
+		(id, authed_name, org, about, contact, join_date,
+		 blocked, account, password, last_login_ip, last_login_date, last_modified_date)
+		VALUES
+			(null, #{authorizedName}, #{org}, #{about}, #{contact}, #{joinDate},
+			 0, #{account}, #{password}, null, null, null)
+	</insert>
+
+	<select id="count" resultType="_long">
+		SELECT COUNT(1) FROM
+		<choose>
+			<when test="from != null">
+				${from}
+			</when>
+			<otherwise>
+				auth_users
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+	</select>
+
+	<delete id="delete">
+		DELETE FROM
+		<choose>
+			<when test="from != null">
+				${from}
+			</when>
+			<otherwise>
+				auth_users
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+	</delete>
+
+	<update id="update">
+		UPDATE auth_users
+		SET ${update}
+		WHERE ${where}
+	</update>
+
+	<select id="findOne" resultMap="auth_user">
+		SELECT
+		<choose>
+			<when test="columns == null">
+				*
+			</when>
+			<otherwise>
+				${columns}
+			</otherwise>
+		</choose>
+		FROM
+		<choose>
+			<when test="from != null">
+				${from}
+			</when>
+			<otherwise>
+				auth_users
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+	</select>
+
+	<select id="query" resultMap="auth_user">
+		SELECT
+		<choose>
+			<when test="columns == null">
+				*
+			</when>
+			<otherwise>
+				${columns}
+			</otherwise>
+		</choose>
+		FROM
+		<choose>
+			<when test="from != null">
+				${from}
+			</when>
+			<otherwise>
+				auth_users
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+		<if test="groupBy != null">
+			GROUP BY ${groupBy}
+		</if>
+		<if test="having != null">
+			HAVING ${having}
+		</if>
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+		<if test="limit != null">
+			LIMIT ${limit}
+		</if>
+	</select>
+</mapper>

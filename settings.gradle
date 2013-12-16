@@ -1,1 +1,1 @@
-include ':util', ':core', ':notty', ':app-store', ':impression-gxu', ':webapp'
+include ':util', ':core', ':support', ':notty', ':app-store', ':webapp', ':entertainment'

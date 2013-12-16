@@ -42,7 +42,7 @@ public class FileTransfer {
 	 * @return 存储文件的相对路径（relativePath + fileName)
 	 */
 	public static final String fileTransfer(final byte[] bytes, final String fileSystemPath, String relativePath,
-	                                        long maxSize, String[] supportedExts, String fileName, boolean rename) {
+											long maxSize, String[] supportedExts, String fileName, boolean rename) {
 		checkSize(bytes, maxSize);
 		String ext = resolveExt(fileName, supportedExts);
 

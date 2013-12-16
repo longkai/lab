@@ -18,26 +18,27 @@ import java.security.NoSuchAlgorithmException;
  */
 public class Encryptor {
 
-    public static final String MD5(String src) {
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("MD5");
-            md.reset();
-            md.update(src.getBytes("UTF-8"));
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("MD5 digest error!", e);
-        } catch (UnsupportedEncodingException e) {}
+	public static final String MD5(String src) {
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("MD5");
+			md.reset();
+			md.update(src.getBytes("UTF-8"));
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("MD5 digest error!", e);
+		} catch (UnsupportedEncodingException e) {
+		}
 
-        byte[] byteArray = md.digest();
-        StringBuffer md5StrBuff = new StringBuffer();
+		byte[] byteArray = md.digest();
+		StringBuffer md5StrBuff = new StringBuffer();
 
-        for (int i = 0; i < byteArray.length; i++) {
-            if (Integer.toHexString(0xFF & byteArray[i]).length() == 1)
-                md5StrBuff.append("0").append(Integer.toHexString(0xFF & byteArray[i]));
-            else
-                md5StrBuff.append(Integer.toHexString(0xFF & byteArray[i]));
-        }
+		for (int i = 0; i < byteArray.length; i++) {
+			if (Integer.toHexString(0xFF & byteArray[i]).length() == 1)
+				md5StrBuff.append("0").append(Integer.toHexString(0xFF & byteArray[i]));
+			else
+				md5StrBuff.append(Integer.toHexString(0xFF & byteArray[i]));
+		}
 
-        return md5StrBuff.toString();
-    }
+		return md5StrBuff.toString();
+	}
 }

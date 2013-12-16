@@ -1,13 +1,11 @@
-apply plugin: 'war'
-
-task createWebProject(dependsOn: 'createJavaProject') << {
-	def webAppDir = file("$webAppDirName")
-	webAppDir.mkdirs()
-}
-
 dependencies {
-	compile project(':core')
-	providedCompile "javax.servlet:servlet-api:$servletAPI"
-    testCompile "org.springframework:spring-test:$spring"
+	compile project(':support')
 }
 
+processResources {
+	def configFileName = "${project.name}.groovy"
+	from(sourceSets.main.resources.srcDirs) {
+		filter(org.apache.tools.ant.filters.ReplaceTokens,
+			tokens: loadGroovyProperties(configFileName))
+	}
+}

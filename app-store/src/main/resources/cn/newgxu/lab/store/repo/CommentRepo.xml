@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+  ~ The MIT License (MIT)
+  ~ Copyright (c) 2013 longkai(龙凯)
+  ~ The software shall be used for good, not evil.
+  -->
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.newgxu.lab.store.repo.CommentRepo">
+	<cache />
+
+	<resultMap id="comment" type="app_comment" autoMapping="true">
+		<id column="id" property="id" />
+		<association property="app" resultMap="app" />
+	</resultMap>
+
+	<resultMap id="app" type="app" autoMapping="true">
+		<id column="app_id" property="id" />
+	</resultMap>
+
+	<sql id="comment_columns">
+		C.id,
+		C.uid,
+		C.nick,
+		C.app_id,
+		C.rate,
+		C.useful_count,
+		C.comment,
+		C.rate_date
+	</sql>
+
+	<sql id="app_columns">
+		A.name,
+		A.uid as _uid,  <!--我们不想抓那个作者了，所以这样写 -->
+		A.category,
+		A.platform,
+		A.os_requirement,
+		A.description,
+		A.total_install_count,
+		A.icon,
+		A.rate,
+		A.rate_count,
+		A.extra
+	</sql>
+
+	<insert id="insert" parameterType="app_comment" useGeneratedKeys="true" keyColumn="id"
+			keyProperty="id">
+		INSERT INTO app_comments (id, uid, nick, app_id, rate, useful_count, comment, rate_date)
+		VALUES (
+			null, #{uid}, #{nick}, #{app.id}, #{rate}, 0, #{comment}, #{rate_date}
+		);
+	</insert>
+
+	<select id="find" parameterType="_long" resultMap="comment">
+		SELECT
+		<include refid="comment_columns" />
+		,
+		<include refid="app_columns" />
+		FROM
+		app_comments as C JOIN apps as A on C.app_id = A.id
+		WHERE C.id = #{id}
+	</select>
+
+	<select id="count" resultType="_long">
+		SELECT COUNT(1) FROM
+		<choose>
+			<when test="from != null">
+				${from}
+			</when>
+			<otherwise>
+				app_comments
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+	</select>
+
+	<delete id="delete">
+		DELETE FROM
+		<choose>
+			<when test="from != null">
+				${from}
+			</when>
+			<otherwise>
+				app_comments
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+	</delete>
+
+	<update id="update">
+		UPDATE app_comments
+		SET ${update}
+		WHERE ${where}
+	</update>
+
+	<select id="findOne" resultMap="comment">
+		SELECT
+		<choose>
+			<when test="columns == null">
+				<include refid="comment_columns" />
+				,
+				<include refid="app_columns" />
+			</when>
+			<when test="@cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+				<include refid="comment_columns" />
+			</when>
+			<otherwise>
+				${columns}
+			</otherwise>
+		</choose>
+		FROM
+		<choose>
+			<when test="@cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+				app_comments as C
+			</when>
+			<when test="from == null">
+				app_comments as C JOIN apps as A on C.app_id = A.id
+			</when>
+			<otherwise>
+				${from}
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+	</select>
+
+	<select id="query" resultMap="comment">
+		SELECT
+		<choose>
+			<when test="columns != null">
+				${columns}
+			</when>
+			<when test="@cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+				<include refid="comment_columns" />
+			</when>
+			<otherwise>
+				<include refid="comment_columns" />
+				,
+				<include refid="app_columns" />
+			</otherwise>
+		</choose>
+		FROM
+		<choose>
+			<when test="from == null and @cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+				app_comments as C
+			</when>
+			<when test="from == null">
+				app_comments as C JOIN apps as A on C.app_id = A.id
+			</when>
+			<otherwise>
+				${from}
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+		<if test="groupBy != null">
+			GROUP BY ${groupBy}
+		</if>
+		<if test="having != null">
+			HAVING ${having}
+		</if>
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+		<if test="limit != null">
+			LIMIT ${limit}
+		</if>
+	</select>
+</mapper>

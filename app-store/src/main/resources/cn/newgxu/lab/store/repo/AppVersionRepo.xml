@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+  ~ The MIT License (MIT)
+  ~ Copyright (c) 2013 longkai(龙凯)
+  ~ The software shall be used for good, not evil.
+  -->
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.newgxu.lab.store.repo.AppVersionRepo">
+	<cache />
+
+	<resultMap id="app_version" type="app_version" autoMapping="true">
+		<id column="id" property="id" />
+		<association property="app" resultMap="app" />
+	</resultMap>
+
+	<resultMap id="app" type="app" autoMapping="true">
+		<id column="app_id" property="id" />
+		<result column="_extra" property="extra" />
+		<association property="author" resultMap="author" />
+	</resultMap>
+
+	<resultMap id="author" type="member" autoMapping="true">
+		<id column="uid" property="id" />
+	</resultMap>
+
+	<sql id="app_columns">
+		A.name,
+		A.uid,
+		A.category,
+		A.platform,
+		A.os_requirement,
+		A.description,
+		A.total_install_count,
+		A.icon,
+		A.rate,
+		A.rate_count,
+		A.extra as _extra,
+		A.created_date
+	</sql>
+
+	<sql id="member_columns">
+		M.uid as _uid,
+		M.comefrom,
+		M.nick,
+		M.label,
+		M.invalid,
+		M.contact,
+		M.description as _description,
+		M.participate_date,
+		M.last_modified_date
+	</sql>
+
+	<sql id="app_version_columns">
+		V.id,
+		V.app_id,
+		V.version,
+		V.update_date,
+		V.install_count,
+		V.size,
+		V.update_info,
+		V.uri,
+		V.extra
+	</sql>
+
+	<insert id="insert" parameterType="app_version" useGeneratedKeys="true" keyColumn="id"
+			keyProperty="id">
+		INSERT INTO
+			app_versions (id, app_id, version, update_date, install_count, size, update_info, uri, extra)
+		VALUES
+			(null, #{app.id}, #{version}, #{update_date}, 0, #{size}, #{update_info}, #{uri},
+			 #{extra});
+	</insert>
+
+	<select id="find" parameterType="_long" resultMap="app_version">
+		SELECT
+		<include refid="app_version_columns" />
+		,
+		<include refid="app_columns" />
+		FROM
+		app_versions as V JOIN apps as A on V.app_id = A.id
+		WHERE V.id = #{id}
+	</select>
+
+	<select id="count" resultType="_long">
+		SELECT COUNT(1) FROM
+		<choose>
+			<when test="from != null">
+				${from}
+			</when>
+			<otherwise>
+				app_versions
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+	</select>
+
+	<delete id="delete">
+		DELETE FROM
+		<choose>
+			<when test="from != null">
+				${from}
+			</when>
+			<otherwise>
+				app_versions
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+	</delete>
+
+	<update id="update">
+		UPDATE app_versions
+		SET ${update}
+		WHERE ${where}
+	</update>
+
+	<select id="findOne" resultMap="app_version">
+		SELECT
+		<choose>
+			<when test="columns == null">
+				<include refid="app_version_columns" />
+				,
+				<include refid="app_columns" />
+			</when>
+			<when test="@cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+				<include refid="app_version_columns" />
+			</when>
+			<otherwise>
+				${columns}
+			</otherwise>
+		</choose>
+		FROM
+		<choose>
+			<when test="@cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+				app_versions as V
+			</when>
+			<when test="from == null">
+				app_versions as V JOIN apps as A on V.app_id = A.id
+			</when>
+			<otherwise>
+				${from}
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+	</select>
+
+	<select id="query" resultMap="app_version">
+		SELECT
+		<choose>
+			<when test="columns != null">
+				${columns}
+			</when>
+			<when test="@cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+				<include refid="app_version_columns" />
+			</when>
+			<otherwise>
+				<include refid="app_version_columns" />
+				,
+				<include refid="app_columns" />
+			</otherwise>
+		</choose>
+		FROM
+		<choose>
+			<when test="@cn.newgxu.lab.util.SQLUtils@isWildCard(columns)">
+				app_versions as V
+			</when>
+			<when test="from == null">
+				app_versions as V JOIN apps as A on V.app_id = A.id
+			</when>
+			<otherwise>
+				${from}
+			</otherwise>
+		</choose>
+		<if test="where != null">
+			WHERE ${where}
+		</if>
+		<if test="groupBy != null">
+			GROUP BY ${groupBy}
+		</if>
+		<if test="having != null">
+			HAVING ${having}
+		</if>
+		<if test="orderBy != null">
+			ORDER BY ${orderBy}
+		</if>
+		<if test="limit != null">
+			LIMIT ${limit}
+		</if>
+	</select>
+</mapper>

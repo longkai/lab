@@ -5,7 +5,7 @@
  */
 package cn.newgxu.lab.util;
 
-import org.junit.*;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -23,60 +23,60 @@ import java.util.logging.Logger;
  */
 public class ResourcesTest {
 
-    @Test
-    public void testOpenBufferedReader() throws Exception {
-        Resources.openBufferedReader("http://lab.newgxu.cn", new Resources.ResourcesCallback(){
-            @Override
-            protected void onSuccess(BufferedReader br) throws IOException {
-                String str = null;
-                StringBuffer sb = new StringBuffer();
-                while ((str = br.readLine()) != null) {
-                    sb.append(str);
-                }
-                System.out.println(sb.toString());
-            }
+	@Test
+	public void testOpenBufferedReader() throws Exception {
+		Resources.openBufferedReader("http://lab.newgxu.cn", new Resources.ResourcesCallback() {
+			@Override
+			protected void onSuccess(BufferedReader br) throws IOException {
+				String str = null;
+				StringBuffer sb = new StringBuffer();
+				while ((str = br.readLine()) != null) {
+					sb.append(str);
+				}
+				System.out.println(sb.toString());
+			}
 
-            @Override
-            protected void onError(Throwable t) {
-                l.log(Level.SEVERE, "cannot connect net!", t);
-            }
-        });
-    }
+			@Override
+			protected void onError(Throwable t) {
+				l.log(Level.SEVERE, "cannot connect net!", t);
+			}
+		});
+	}
 
-    @Test
-    public void testOpenBufferedWriter() throws Exception {
-        final String uri = "D:/test.txt";
-        Resources.openBufferedWriter(uri, true, new Resources.ResourcesCallback() {
-            @Override
-            protected void onSuccess(BufferedWriter br) throws IOException {
-                br.write(uri);
-                br.flush();
-                InputStream in = Resources.getInputStream(uri);
-                org.junit.Assert.assertNotNull(in);
-                in.close();
-            }
+	@Test
+	public void testOpenBufferedWriter() throws Exception {
+		final String uri = "D:/test.txt";
+		Resources.openBufferedWriter(uri, true, new Resources.ResourcesCallback() {
+			@Override
+			protected void onSuccess(BufferedWriter br) throws IOException {
+				br.write(uri);
+				br.flush();
+				InputStream in = Resources.getInputStream(uri);
+				org.junit.Assert.assertNotNull(in);
+				in.close();
+			}
 
-            @Override
-            protected void onError(Throwable t) {
-                l.log(Level.SEVERE, "I/O error!", t);
-            }
-        });
-    }
+			@Override
+			protected void onError(Throwable t) {
+				l.log(Level.SEVERE, "I/O error!", t);
+			}
+		});
+	}
 
-    @Test
-    public void testOpenInputStream() throws Exception {
+	@Test
+	public void testOpenInputStream() throws Exception {
 //      注意，在ide中测试和在gradle里测试路径是有区别的，要根据当前的project来区别classpath！
 //      String s = Resources.getResourceAsString("settings.gradle");
-        String s = null;
-        try {
-            s = Resources.getResourceAsString("http://www.baidu.com");
-        } catch (Exception e) {
-            l.log(Level.SEVERE, "I/O error!", e);
-            return;
-        }
-        org.junit.Assert.assertNotNull(s);
-        System.out.println(s);
-    }
+		String s = null;
+		try {
+			s = Resources.getResourceAsString("http://www.baidu.com");
+		} catch (Exception e) {
+			l.log(Level.SEVERE, "I/O error!", e);
+			return;
+		}
+		org.junit.Assert.assertNotNull(s);
+		System.out.println(s);
+	}
 
-    private static Logger l = Logger.getLogger(ResourcesTest.class.getName());
+	private static Logger l = Logger.getLogger(ResourcesTest.class.getName());
 }

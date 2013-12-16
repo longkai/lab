@@ -13,7 +13,7 @@
 
     <context:annotation-config />
 
-    <bean class="cn.newgxu.lab.core.config.WebMvcConfig" />
+    <bean class="cn.newgxu.core.WebMvcConfig" />
 
     <!--测试数据库ddl以及脚本，会删除表重新注入测试数据，务必使用在开发与测试模式下，其他情况下一定将下面的结点注释或者删除！-->
     <!--<jdbc:initialize-database data-source="dataSource">-->

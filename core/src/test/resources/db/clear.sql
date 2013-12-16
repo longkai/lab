@@ -1,4 +1,0 @@
-DROP TABLE IF EXISTS app_comments;
-DROP TABLE IF EXISTS app_versions;
-DROP TABLE IF EXISTS apps;
-DROP TABLE IF EXISTS members;

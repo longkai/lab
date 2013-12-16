@@ -1,8 +1,43 @@
-subprojects {
+// 在这里添加需要添加到最终war中的web相关项目
+List<Project> webProjects = [
+	project(':support'),
+	project(':notty'),
+	project(':app-store'),
+	project(':entertainment')
+]
+
+// gradle自定义脚本配置选项
+ext {
+	// lab项目当前的版本，推荐每次小版本更新小数点后++，大版本整数++
+	VERSION = '3.0'
+	// 使用gradle的版本，用于gradle wrapper
+	GRADLE_VERSION = '1.9'
+	// 运行时环境（dev，test，release选择）命令行参数名-Pprofile={profile}
+	PROFILE_ARG = 'profile'
+	// 默认运行时环境
+	DEFAULT_PROFILE = 'dev'
+	// 运行时环境配置文件目录名
+	CONFIG_DIR = 'configurations'
+}
+
+// 添加jetty9的支持，默认的gradle-jetty-plugin居然是jetty6，蛋碎
+buildscript {
+	repositories {
+		jcenter()
+		maven { url = 'http://dl.bintray.com/khoulaiz/gradle-plugins' }
+	}
+
+	dependencies {
+		classpath 'com.sahlbach.gradle:gradle-jetty-eclipse-plugin:1.9.+'
+	}
+}
+
+allprojects {
 	apply plugin: 'java'
 	apply plugin: 'idea'
+	apply plugin: 'eclipse'
 
-	version = '1.0.0'
+	version = VERSION
 
 	sourceCompatibility = 1.6
 	targetCompatibility = 1.6
@@ -11,22 +46,133 @@ subprojects {
 		jcenter()
 		mavenCentral()
 	}
+}
 
+subprojects {
+	// 由于gradle在cofigration中apply的plugin无效（应该是一个bug），故所有的project都apply war
+	apply plugin: 'war'
+
+	// 我们使用slf4j&logback，移除commons-logging
 	configurations {
 		all*.exclude group: 'commons-logging', name: 'commons-logging'
 	}
 
 	dependencies {
 		compile "org.slf4j:slf4j-api:$slf4j"
-		testCompile "junit:junit:$junit"
-	}
 
-	task createJavaProject << {
-		sourceSets*.java.srcDirs*.each { it.mkdirs() }
-		sourceSets*.resources.srcDirs*.each { it.mkdirs() }
+		providedCompile	"javax.servlet:javax.servlet-api:$servlet",
+			"javax.servlet.jsp:javax.servlet.jsp-api:$jsp",
+			"javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:$jstl"
+
+		testCompile	"junit:junit:$junit",
+			"com.jayway.jsonpath:json-path:$jsonPath",
+			"org.springframework:spring-test:$spring"
 	}
 
 	tasks.withType(Compile) {
 		options.encoding = 'UTF-8'
 	}
+}
+
+// 整个项目的核心配置，基本上包含了所有的依赖，以及spring（包括mvc）和mybatis的配置
+project(':core') {
+	apply plugin: 'war'
+
+	dependencies {
+		compile project(':util')
+		compile "javax.inject:javax.inject:$javaxInject",
+			"org.springframework:spring-core:$spring",
+			"org.springframework:spring-beans:$spring",
+			"org.springframework:spring-context:$spring",
+			"org.springframework:spring-context-support:$spring",
+			"org.springframework:spring-jdbc:$spring",
+			"org.springframework:spring-tx:$spring",
+			"org.springframework:spring-web:$spring",
+			"org.springframework:spring-webmvc:$spring",
+			"org.freemarker:freemarker:$freemarker",
+			"com.fasterxml.jackson.core:jackson-core:$jackson2",
+			"com.fasterxml.jackson.core:jackson-databind:$jackson2",
+			"org.mybatis:mybatis:$mybatis",
+			"org.mybatis:mybatis-spring:$mybatisSpring",
+			"org.apache.tomcat:tomcat-jdbc:$tomcatJdbc",
+			"mysql:mysql-connector-java:$mysqlJdbc",
+			"org.slf4j:jcl-over-slf4j:$slf4j",
+			"ch.qos.logback:logback-classic:$logback"
+	}
+
+	// core项目不同的运行时环境有自己的配置值
+	// 如果子项目有自己的运行时环境需要，直接copy下面这段代码到子项目的build.gradle中（见notty的build.gradle）
+	// todo 如你所想，这应该定义为一个方法，but，相信你能做到
+	processResources {
+		def configFileName = "${project.name}.groovy"
+		from(sourceSets.main.resources.srcDirs) {
+			filter(org.apache.tools.ant.filters.ReplaceTokens,
+				tokens: loadGroovyProperties(configFileName))
+		}
+	}
+}
+
+// 给所有的web项目添加必须的依赖和环境
+configure(webProjects) {
+//	apply plugin: 'war'
+
+	// 给所有的测试添加环境，否则可能找不到所依赖项目的测试资源文件
+	test {
+		classpath += project(':core').sourceSets.test.runtimeClasspath
+	}
+
+	dependencies {
+		compile project(':core')
+	}
+}
+
+// 配置最终包含所有子项目的的war
+project(':webapp') {
+	apply plugin: 'war'
+	apply plugin: 'jettyEclipse'
+
+	dependencies {
+		compile webProjects
+	}
+
+	war {
+		// 收集子项目包含的资源文件整合在war中
+		webProjects.each {
+			from(it.webAppDir)
+		}
+	}
+
+	jettyEclipse {
+		// Defaults
+		// httpPort = 8080
+		// stopPort = 8090
+		// stopKey = "stop"
+		// contextPath = '/'
+		// scanIntervalInSeconds = 5
+		// automaticReload = false
+		// rebuildIntervalInSeconds = 0
+
+		// 如果不添加下面这个的话，查看日志（gradel xxx --info）生成的war居然没有web.xml，so，this is a bug fix.
+		// 但是我们已经放弃使用web.xml啦-/-
+		// overrideWebXml = file('src/main/webapp/WEB-INF/web.xml')
+	}
+}
+
+// 获取当前的运行模式(开发，测试，部署）分别对应(dev, test, release)
+def getProfile() {
+	if (project.hasProperty(PROFILE_ARG))
+		return project[PROFILE_ARG]
+	// 默认是开发模式
+	return DEFAULT_PROFILE
+}
+
+// 将groovy的配置文件转换为java properties
+def loadGroovyProperties(fileName) {
+	String profile = getProfile()
+	def configFile = file("${rootProject.projectDir}/${CONFIG_DIR}/${profile}/${fileName}")
+	new ConfigSlurper().parse(configFile.toURI().toURL()).toProperties()
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = GRADLE_VERSION
 }
