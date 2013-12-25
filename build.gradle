@@ -9,7 +9,7 @@ List<Project> webProjects = [
 // gradle自定义脚本配置选项
 ext {
 	// lab项目当前的版本，推荐每次小版本更新小数点后++，大版本整数++
-	VERSION = '3.0'
+	VERSION = '3.1'
 	// 使用gradle的版本，用于gradle wrapper
 	GRADLE_VERSION = '1.9'
 	// 运行时环境（dev，test，release选择）命令行参数名-Pprofile={profile}
@@ -94,7 +94,7 @@ project(':core') {
 			"com.fasterxml.jackson.core:jackson-databind:$jackson2",
 			"org.mybatis:mybatis:$mybatis",
 			"org.mybatis:mybatis-spring:$mybatisSpring",
-			"org.apache.tomcat:tomcat-jdbc:$tomcatJdbc",
+			"commons-dbcp:commons-dbcp:$dbcp",
 			"mysql:mysql-connector-java:$mysqlJdbc",
 			"org.slf4j:jcl-over-slf4j:$slf4j",
 			"ch.qos.logback:logback-classic:$logback"

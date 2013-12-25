@@ -7,6 +7,7 @@ package cn.newgxu.core;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.cache.CacheManager;
@@ -60,13 +61,12 @@ public class Spring {
 
 	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
-		org.apache.tomcat.jdbc.pool.DataSource dataSource
-				= new org.apache.tomcat.jdbc.pool.DataSource();
+		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setUrl(env.getRequiredProperty("jdbc.url"));
+		dataSource.setDriverClassName(env.getRequiredProperty("jdbc.driver"));
 		dataSource.setUsername(env.getRequiredProperty("jdbc.username"));
 		dataSource.setPassword(env.getRequiredProperty("jdbc.password"));
-		dataSource.setDriverClassName(env.getRequiredProperty("jdbc.driver"));
-		dataSource.setDefaultAutoCommit(env.getProperty("jdbc.auto_commit", Boolean.class));
+		dataSource.setDefaultAutoCommit(env.getProperty("jdbc.auto_commit", Boolean.TYPE, false));
 		return dataSource;
 	}
 
