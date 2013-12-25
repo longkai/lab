@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 
 import static cn.newgxu.lab.util.ViewConstants.BAD_REQUEST;
@@ -127,7 +125,7 @@ public class NoticeController {
 					+ Arrays.toString(Notty.ACCEPT_FILE_TYPE));
 		}
 		// 生成存放在本地的文件名
-		String url = makeFileURL(originalName, id);
+		String url = makeFileURL(ext, id);
 		// 开始上传，注意，必须是使用相对路径（相对于multipart config location），否则会写不到想要的目录
 		// 请查阅java doc
 		file.write(url);
@@ -245,13 +243,13 @@ public class NoticeController {
 	}
 
 	/**
-	 * 返回 {root_dir}/notices/2013/12-12-{notice_id}-{filename} 格式的文件名
+	 * 返回 {root_dir}/notices/2013/12-12-{notice_id}.{fileType} 格式的文件名
 	 *
-	 * @param filename 文件名
+	 * @param fileType 文件名
 	 * @param nid      通告id
 	 * @return 存储在服务器上的路径
 	 */
-	private String makeFileURL(String filename, long nid) {
+	private String makeFileURL(String fileType, long nid) {
 		Calendar now = Calendar.getInstance();
 		StringBuilder url = new StringBuilder();
 		// 本项目上传文件存放目录
@@ -271,9 +269,8 @@ public class NoticeController {
 		}
 		// 真正的文件名
 		url.append(now.get(Calendar.MONTH) + 1).append("-")
-			.append(now.get(Calendar.DAY_OF_MONTH)).append("-")
-			.append(nid).append("-")
-			.append(filename);
+				.append(now.get(Calendar.DAY_OF_MONTH)).append("-")
+				.append(nid).append(".").append(fileType);
 		return url.toString();
 	}
 

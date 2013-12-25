@@ -183,7 +183,7 @@
                                 <li><a href="/notice">校园信息</a></li>
                                 <li><a href="/yundianbo">云点播</a></li>
                                 <li><a href="/app">应用市场</a></li>
-                                <li><a href="/apps/2">印象西大</a></li>
+                                <li><a href="/static/apps/newgxu.apk">印象西大</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -329,7 +329,7 @@
                 })
                 $('#impression_gxu img, #impression_gxu h2').css('cursor', 'pointer').click(function(e) {
                     e.preventDefault();
-                    location.href = '/apps/2';
+                    location.href = '/static/apps/newgxu.apk';
                 })
             })
         }(window.jQuery)

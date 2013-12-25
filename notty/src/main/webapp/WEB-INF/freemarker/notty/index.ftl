@@ -93,7 +93,7 @@ body {
 					<li class="active"><a href="/info/">首页</a></li>
 					<li><a href="/resources/notty/html/auth.html">认证</a></li>
 					<li><a href="/resources/notty/html/help.html">帮助</a></li>
-					<li><a href="/apps/1/download">客户端app</a></li>
+					<li><a href="/static/apps/notices.apk">客户端app</a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							雨无声实验室 <b class="caret"></b>
