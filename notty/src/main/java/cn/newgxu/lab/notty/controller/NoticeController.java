@@ -135,7 +135,8 @@ public class NoticeController {
 
 		// 执行到这一步表示文件已经上传ok了，不需要事务了，原来的文件删除与否意义不大（出错的概率非常小了）
 		String oldDocURL = notice.getDocUrl();
-		if (!TextUtils.isEmpty(oldDocURL)) {
+		// 两者的文件名不相同才删，否则刚才上传的文件只是被覆盖了而已
+		if (!url.equals(oldDocURL)) {
 			File originalFile = new File(oldDocURL);
 			if (originalFile.exists()) {
 				if (originalFile.delete()) {
@@ -147,11 +148,11 @@ public class NoticeController {
 		}
 
 		// 设置文件名，是一个人类易读的文件名（并非是存放的目录名），没有的话就是客户端文件最初的名字
-		String customedName = request.getParameter("qqfilename");
-		if (TextUtils.isEmpty(customedName, true)) {
+		String customizedName = request.getParameter("qqfilename");
+		if (TextUtils.isEmpty(customizedName, true)) {
 			notice.setDocName(FileUpload.resolveFileName(file));
 		} else {
-			notice.setDocName(originalName);
+			notice.setDocName(customizedName);
 		}
 		notice.setDocUrl(url);
 		noticeService.update(notice, user.getId());
