@@ -41,4 +41,22 @@ public class Encryptor {
 
 		return md5StrBuff.toString();
 	}
+
+	public static final String sha1(String src) {
+		MessageDigest md;
+		try {
+			md = MessageDigest.getInstance("SHA1");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+
+		byte[] result = md.digest(src.getBytes());
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < result.length; i++) {
+			sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+		}
+
+		return sb.toString();
+	}
+
 }
